@@ -1,0 +1,29 @@
+html
+<pre>
+CREATE TABLE category (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE component (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_id INTEGER NOT NULL,
+    name        VARCHAR(120) NOT NULL,
+    price       REAL NOT NULL,
+    socket      VARCHAR(30),
+    FOREIGN KEY (category_id) REFERENCES category (id)
+);
+
+CREATE TABLE build (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    title       VARCHAR(120) NOT NULL,
+    total_price REAL DEFAULT 0
+);
+CREATE TABLE build_component (
+    build_id     INTEGER NOT NULL,
+    component_id INTEGER NOT NULL,
+    PRIMARY KEY (build_id, component_id),
+    FOREIGN KEY (build_id)     REFERENCES build (id),
+    FOREIGN KEY (component_id) REFERENCES component (id)
+);
+</pre>
