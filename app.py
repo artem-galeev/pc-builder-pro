@@ -110,6 +110,57 @@ def register_routes(app):
             )
         return redirect(url_for("catalog"))
 
+    # ==================== АДМИН-ПАНЕЛЬ ====================
+
+    @app.route("/admin")
+    def admin():
+        components = Component.query.order_by(Component.category_id, Component.name).all()
+        categories = Category.query.all()
+        return render_template("admin/index.html", components=components, categories=categories)
+
+    @app.route("/admin/add", methods=["GET", "POST"])
+    def admin_add():
+        categories = Category.query.all()
+        if request.method == "POST":
+            comp = Component(
+                category_id=request.form.get("category_id", type=int),
+                name=request.form.get("name", "").strip(),
+                price=request.form.get("price", 0, type=float),
+                tdp=request.form.get("tdp", 0, type=int),
+                socket=request.form.get("socket", "").strip() or None,
+                performance=request.form.get("performance", 0, type=int),
+            )
+            db.session.add(comp)
+            db.session.commit()
+            flash(f"Добавлено: {comp.name}", "success")
+            return redirect(url_for("admin"))
+        return render_template("admin/form.html", categories=categories, comp=None)
+
+    @app.route("/admin/edit/<int:component_id>", methods=["GET", "POST"])
+    def admin_edit(component_id):
+        comp = Component.query.get_or_404(component_id)
+        categories = Category.query.all()
+        if request.method == "POST":
+            comp.category_id = request.form.get("category_id", type=int)
+            comp.name = request.form.get("name", "").strip()
+            comp.price = request.form.get("price", 0, type=float)
+            comp.tdp = request.form.get("tdp", 0, type=int)
+            comp.socket = request.form.get("socket", "").strip() or None
+            comp.performance = request.form.get("performance", 0, type=int)
+            db.session.commit()
+            flash(f"Обновлено: {comp.name}", "success")
+            return redirect(url_for("admin"))
+        return render_template("admin/form.html", categories=categories, comp=comp)
+
+    @app.route("/admin/delete/<int:component_id>", methods=["POST"])
+    def admin_delete(component_id):
+        comp = Component.query.get_or_404(component_id)
+        name = comp.name
+        db.session.delete(comp)
+        db.session.commit()
+        flash(f"Удалено: {name}", "danger")
+        return redirect(url_for("admin"))
+
 
 app = create_app()
 

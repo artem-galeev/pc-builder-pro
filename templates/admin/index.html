@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель — PC Builder PRO{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Админ-панель</h2>
+    <a href="{{ url_for('admin_add') }}" class="btn btn-success">+ Добавить комплектующее</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white shadow-sm align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Сокет</th>
+                <th class="text-end">TDP</th>
+                <th class="text-end">Цена, ₽</th>
+                <th class="text-end">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in components %}
+            <tr>
+                <td class="text-muted">{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.category.name }}</td>
+                <td>{{ c.socket or "—" }}</td>
+                <td class="text-end">{{ c.tdp }}</td>
+                <td class="text-end fw-bold">{{ "%.0f"|format(c.price) }}</td>
+                <td class="text-end">
+                    <a href="{{ url_for('admin_edit', component_id=c.id) }}"
+                       class="btn btn-sm btn-outline-primary">✏️</a>
+                    <form method="post" action="{{ url_for('admin_delete', component_id=c.id) }}"
+                          class="d-inline" onsubmit="return confirm('Удалить «{{ c.name }}»?')">
+                        <button class="btn btn-sm btn-outline-danger">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p class="text-muted">Всего: {{ components|length }} комплектующих</p>
+{% endblock %}
