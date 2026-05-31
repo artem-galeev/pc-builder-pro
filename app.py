@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 from config import Config
 from models import db, Category, Component
+from services.power import total_power, recommended_psu
+from services.fps import predict_fps
+from services.compatibility import check_compatibility
 
 
 def create_app():
@@ -30,6 +33,43 @@ def register_routes(app):
             categories=categories,
             components=components,
             selected=category_id,
+        )
+
+    @app.route("/build", methods=["GET", "POST"])
+    def build():
+        cats = ["CPU", "Motherboard", "GPU", "RAM", "PSU", "Storage"]
+        options = {
+            name: Component.query.join(Category)
+            .filter(Category.name == name)
+            .order_by(Component.price)
+            .all()
+            for name in cats
+        }
+
+        selected, result = {}, None
+        if request.method == "POST":
+            chosen = []
+            for name in cats:
+                cid = request.form.get(name, type=int)
+                comp = Component.query.get(cid) if cid else None
+                selected[name] = cid
+                if comp:
+                    chosen.append(comp)
+
+            cpu = next((c for c in chosen if c.category.name == "CPU"), None)
+            mb = next((c for c in chosen if c.category.name == "Motherboard"), None)
+            gpu = next((c for c in chosen if c.category.name == "GPU"), None)
+
+            result = {
+                "total_price": sum(c.price for c in chosen),
+                "power": total_power(chosen),
+                "psu": recommended_psu(chosen),
+                "warnings": check_compatibility(cpu, mb),
+                "fps": predict_fps(gpu.id if gpu else None, cpu.id if cpu else None),
+            }
+
+        return render_template(
+            "build.html", options=options, selected=selected, result=result
         )
 
 
