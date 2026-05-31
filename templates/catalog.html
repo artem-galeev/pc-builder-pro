@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог — PC Builder PRO{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Каталог комплектующих</h2>
+
+<div class="mb-4">
+    <a href="{{ url_for('catalog') }}"
+       class="btn btn-sm {{ 'btn-primary' if not selected else 'btn-outline-primary' }}">Все</a>
+    {% for category in categories %}
+    <a href="{{ url_for('catalog', category=category.id) }}"
+       class="btn btn-sm {{ 'btn-primary' if selected == category.id else 'btn-outline-primary' }}">
+        {{ category.name }}
+    </a>
+    {% endfor %}
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white shadow-sm align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Сокет</th>
+                <th class="text-end">TDP, Вт</th>
+                <th class="text-end">Цена, ₽</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in components %}
+            <tr>
+                <td>{{ c.name }}</td>
+                <td>{{ c.category.name }}</td>
+                <td>{{ c.socket or "—" }}</td>
+                <td class="text-end">{{ c.tdp }}</td>
+                <td class="text-end fw-bold">{{ "%.0f"|format(c.price) }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center text-muted">Нет комплектующих</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
