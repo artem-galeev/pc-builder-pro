@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}PC Builder PRO — подбор комплектующих{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
+    <h1 class="display-5 fw-bold">Подбор комплектующих для ПК</h1>
+    <p class="lead text-muted">Соберите компьютер, проверьте совместимость, мощность и FPS в играх.</p>
+    <a href="{{ url_for('catalog') }}" class="btn btn-primary btn-lg mt-2">Перейти в каталог</a>
+</div>
+
+<h3 class="mb-3">Категории комплектующих</h3>
+<div class="row g-3">
+    {% for category in categories %}
+    <div class="col-6 col-md-4 col-lg-3">
+        <a href="{{ url_for('catalog', category=category.id) }}"
+           class="text-decoration-none">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="text-muted mb-0">{{ category.components|length }} товаров</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% else %}
+    <p class="text-muted">База данных пуста. Запустите <code>python seed.py</code>.</p>
+    {% endfor %}
+</div>
+{% endblock %}
