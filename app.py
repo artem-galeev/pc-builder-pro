@@ -12,7 +12,24 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
     register_routes(app)
+
+    # Обновляем цены при запуске приложения
+    with app.app_context():
+        _update_all_prices()
+
     return app
+
+
+def _update_all_prices():
+    """Обновляет цены всех комплектующих из внешних источников."""
+    components = Component.query.all()
+    updated = 0
+    for comp in components:
+        if update_component_price(comp):
+            updated += 1
+    if updated:
+        db.session.commit()
+    return updated, len(components)
 
 
 def register_routes(app):
@@ -72,6 +89,12 @@ def register_routes(app):
         return render_template(
             "build.html", options=options, selected=selected, result=result
         )
+
+    @app.route("/update-prices", methods=["POST"])
+    def update_prices():
+        updated, total = _update_all_prices()
+        flash(f"Обновлено {updated} из {total} цен.", "success")
+        return redirect(url_for("catalog"))
 
     @app.route("/update-price/<int:component_id>", methods=["POST"])
     def update_price(component_id):
