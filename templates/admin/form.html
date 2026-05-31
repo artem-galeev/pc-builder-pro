@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Редактировать" if comp else "Добавить" }} — Админ{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">{{ "Редактировать: " + comp.name if comp else "Добавить комплектующее" }}</h2>
+
+<form method="post" class="card shadow-sm p-4 bg-white" style="max-width: 600px;">
+    <div class="mb-3">
+        <label class="form-label fw-bold">Категория</label>
+        <select name="category_id" class="form-select" required>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}"
+                {{ 'selected' if comp and comp.category_id == cat.id }}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Название</label>
+        <input type="text" name="name" class="form-control"
+               value="{{ comp.name if comp else '' }}" required>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">Цена, ₽</label>
+            <input type="number" name="price" class="form-control" step="0.01"
+                   value="{{ comp.price if comp else 0 }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">TDP, Вт</label>
+            <input type="number" name="tdp" class="form-control"
+                   value="{{ comp.tdp if comp else 0 }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">Производительность</label>
+            <input type="number" name="performance" class="form-control"
+                   value="{{ comp.performance if comp else 0 }}">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Сокет</label>
+        <input type="text" name="socket" class="form-control"
+               value="{{ comp.socket if comp and comp.socket else '' }}"
+               placeholder="AM5, LGA1700 или пусто">
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            {{ "Сохранить" if comp else "Добавить" }}
+        </button>
+        <a href="{{ url_for('admin') }}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}
