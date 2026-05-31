@@ -8,18 +8,18 @@ CATEGORIES = ["CPU", "GPU", "RAM", "Motherboard", "PSU", "Storage"]
 
 # (категория, название, цена, tdp, сокет, балл производительности)
 COMPONENTS = [
-    ("CPU", "Intel Core i5-12400F", 12000, 65, "LGA1700", 70),
-    ("CPU", "Intel Core i7-13700K", 32000, 125, "LGA1700", 92),
-    ("CPU", "AMD Ryzen 5 5600", 11000, 65, "AM4", 68),
-    ("CPU", "AMD Ryzen 7 7800X3D", 38000, 120, "AM5", 95),
-    ("GPU", "NVIDIA RTX 3060", 28000, 170, None, 65),
-    ("GPU", "NVIDIA RTX 4070", 55000, 200, None, 85),
-    ("GPU", "NVIDIA RTX 4090", 180000, 450, None, 100),
-    ("GPU", "AMD RX 7600", 30000, 165, None, 63),
-    ("RAM", "Kingston Fury 16GB DDR4", 4000, 8, None, 50),
-    ("RAM", "Corsair Vengeance 32GB DDR5", 9000, 10, None, 75),
-    ("Motherboard", "ASUS PRIME B660", 13000, 25, "LGA1700", 60),
-    ("Motherboard", "MSI B550 TOMAHAWK", 14000, 25, "AM4", 62),
+    ("CPU", "AMD Ryzen 5 7500F", 11000, 65, "AM5", 70),
+    ("CPU", "AMD Ryzen 7 7700", 17000, 65, "AM5", 82),
+    ("CPU", "AMD Ryzen 7 7800X3D", 29000, 120, "AM5", 95),
+    ("CPU", "AMD Ryzen 9 9950X", 42000, 170, "AM5", 98),
+    ("GPU", "GeForce RTX 5060", 32000, 150, None, 70),
+    ("GPU", "GeForce RTX 5060 Ti", 49000, 180, None, 80),
+    ("GPU", "GeForce RTX 5070", 58000, 220, None, 88),
+    ("GPU", "GeForce RTX 5080", 114000, 300, None, 95),
+    ("RAM", "Kingston Fury Beast 16GB DDR5", 27000, 8, None, 65),
+    ("RAM", "Kingston Fury Beast 32GB DDR5", 43000, 10, None, 80),
+    ("RAM", "Kingston Fury Beast 32GB DDR4", 30000, 8, None, 60),
+    ("Motherboard", "Gigabyte B760M DS3H DDR4", 9300, 25, "LGA1700", 55),
     ("Motherboard", "ASUS ROG B650", 22000, 30, "AM5", 80),
     ("PSU", "be quiet! 650W", 7000, 0, None, 60),
     ("PSU", "Corsair RM850x", 12000, 0, None, 85),
@@ -29,15 +29,15 @@ COMPONENTS = [
 
 # (игра, название GPU, название CPU, fps)
 GAME_FPS = [
-    ("Cyberpunk 2077", "NVIDIA RTX 3060", "Intel Core i5-12400F", 55),
-    ("Cyberpunk 2077", "NVIDIA RTX 4070", "Intel Core i7-13700K", 95),
-    ("Cyberpunk 2077", "NVIDIA RTX 4090", "AMD Ryzen 7 7800X3D", 160),
-    ("CS2", "NVIDIA RTX 3060", "Intel Core i5-12400F", 240),
-    ("CS2", "NVIDIA RTX 4070", "Intel Core i7-13700K", 400),
-    ("CS2", "NVIDIA RTX 4090", "AMD Ryzen 7 7800X3D", 600),
-    ("GTA V", "NVIDIA RTX 3060", "Intel Core i5-12400F", 110),
-    ("GTA V", "NVIDIA RTX 4070", "Intel Core i7-13700K", 165),
-    ("GTA V", "NVIDIA RTX 4090", "AMD Ryzen 7 7800X3D", 240),
+    ("Cyberpunk 2077", "GeForce RTX 5060", "AMD Ryzen 5 7500F", 65),
+    ("Cyberpunk 2077", "GeForce RTX 5070", "AMD Ryzen 7 7700", 110),
+    ("Cyberpunk 2077", "GeForce RTX 5080", "AMD Ryzen 7 7800X3D", 160),
+    ("CS2", "GeForce RTX 5060", "AMD Ryzen 5 7500F", 280),
+    ("CS2", "GeForce RTX 5070", "AMD Ryzen 7 7700", 450),
+    ("CS2", "GeForce RTX 5080", "AMD Ryzen 7 7800X3D", 600),
+    ("GTA V", "GeForce RTX 5060", "AMD Ryzen 5 7500F", 120),
+    ("GTA V", "GeForce RTX 5070", "AMD Ryzen 7 7700", 180),
+    ("GTA V", "GeForce RTX 5080", "AMD Ryzen 7 7800X3D", 240),
 ]
 
 
