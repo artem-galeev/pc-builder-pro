@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from config import Config
 from models import db, Category, Component
 from services.power import total_power, recommended_psu
 from services.fps import predict_fps
 from services.compatibility import check_compatibility
+from parsers.dns_parser import update_component_price
 
 
 def create_app():
@@ -71,6 +72,20 @@ def register_routes(app):
         return render_template(
             "build.html", options=options, selected=selected, result=result
         )
+
+    @app.route("/update-price/<int:component_id>", methods=["POST"])
+    def update_price(component_id):
+        component = Component.query.get_or_404(component_id)
+        if update_component_price(component):
+            db.session.commit()
+            flash(f"Цена «{component.name}» обновлена: {component.price:.0f} ₽", "success")
+        else:
+            flash(
+                f"Не удалось получить цену «{component.name}» "
+                f"(сайт недоступен или защищён от парсинга).",
+                "warning",
+            )
+        return redirect(url_for("catalog"))
 
 
 app = create_app()

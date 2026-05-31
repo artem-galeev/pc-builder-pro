@@ -5,6 +5,12 @@
 {% block content %}
 <h2 class="mb-4">Каталог комплектующих</h2>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
 <div class="mb-4">
     <a href="{{ url_for('catalog') }}"
        class="btn btn-sm {{ 'btn-primary' if not selected else 'btn-outline-primary' }}">Все</a>
@@ -25,6 +31,7 @@
                 <th>Сокет</th>
                 <th class="text-end">TDP, Вт</th>
                 <th class="text-end">Цена, ₽</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -35,9 +42,16 @@
                 <td>{{ c.socket or "—" }}</td>
                 <td class="text-end">{{ c.tdp }}</td>
                 <td class="text-end fw-bold">{{ "%.0f"|format(c.price) }}</td>
+                <td class="text-end">
+                    <form method="post" action="{{ url_for('update_price', component_id=c.id) }}">
+                        <button class="btn btn-sm btn-outline-success" title="Обновить цену с DNS">
+                            ⟳ цена
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% else %}
-            <tr><td colspan="5" class="text-center text-muted">Нет комплектующих</td></tr>
+            <tr><td colspan="6" class="text-center text-muted">Нет комплектующих</td></tr>
             {% endfor %}
         </tbody>
     </table>
