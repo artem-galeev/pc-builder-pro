@@ -20,6 +20,10 @@
         {{ category.name }}
     </a>
     {% endfor %}
+
+    <form method="post" action="{{ url_for('update_prices') }}" class="d-inline ms-3">
+        <button class="btn btn-sm btn-success">⟳ Обновить все цены</button>
+    </form>
 </div>
 
 <div class="table-responsive">
