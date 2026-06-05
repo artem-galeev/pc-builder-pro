@@ -13,9 +13,23 @@ def create_app():
     db.init_app(app)
     register_routes(app)
 
-    # Обновляем цены при запуске приложения
+    # АВТОМАТИЧЕСКАЯ НАСТРОЙКА БАЗЫ
     with app.app_context():
-        _update_all_prices()
+        from sqlalchemy import inspect
+        inspector = inspect(db.engine)
+
+        if not inspector.has_table("category"):
+            print("📦 Создаём таблицы и заполняем тестовыми данными...")
+            db.create_all()
+
+            # Заполняем данными (импортируем здесь, чтобы избежать циклических импортов)
+            from seed_data import fill_data
+            fill_data()
+
+            _update_all_prices()
+            print("✅ Готово к работе!")
+        else:
+            _update_all_prices()
 
     return app
 
